@@ -22,5 +22,8 @@
         "inquirer": "^6.0.0",
         "log-symbols": "^2.2.0",
         "ora": "^2.1.0"
+    },
+    "templateUrl": {
+        "default": "luohanwen/vue-practice"
     }
 }
