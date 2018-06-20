@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+require("commander")
+    .version(require("../package").version, "-v,--version")
+    .usage("<command> [options]")
+    .command("init", "generate a new project from a template")
+    .command("start", "generate a new act from a template")
+    .parse(process.argv);

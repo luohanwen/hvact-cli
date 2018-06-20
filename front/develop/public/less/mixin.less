@@ -1,0 +1,103 @@
+@base: 1/75rem;
+
+.mix-clearfix() {
+    &:before {
+        content: "";
+        display: table;
+    }
+
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+.ellipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.div-img(@width, @height, @url) {
+    width: @width;
+    height: @height;
+    background: url(@url) no-repeat;
+    background-size: 100% 100%;
+}
+
+.clearfix {
+    .mix-clearfix;
+}
+
+//一倍尺寸字体，比如750下的28px字体，使用14px
+.mix-fontsize(@size) {
+    font-size: @size;
+    @media screen and (min-width: 320px) {
+        font-size: round(320/375 * @size);
+    }
+
+    @media screen and (min-width: 360px) {
+        font-size: round(360/375 * @size);
+    }
+
+    @media screen and (min-width: 375px) {
+        font-size: @size;
+    }
+
+    @media screen and (min-width: 414px) {
+        font-size: round(414/375 * @size);
+    }
+    @media screen and (min-width: 640px) {
+        font-size: round(640/375 * @size);
+    }
+    @media screen and (min-width: 750px) {
+        font-size: round(2 * @size);
+    }
+}
+
+.mix-flexbox() {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.mix-flex(@values) {
+    -webkit-box-flex: @values;
+    -moz-box-flex: @values;
+    -webkit-flex: @values;
+    -ms-flex: @values;
+    flex: @values;
+}
+
+.mix-arrow(@w, @color: #fff, @deg: 0deg, @trans: ~"0,0") {
+    &:after {
+        content: "";
+        display: inline-block;
+        vertical-align: middle;
+        width: @w;
+        height: @w;
+        margin-left: 6px;
+        border: 1px solid @color;
+        border-width: 1px 1px 0 0;
+        transform: rotate(@deg) translate(@trans);
+    }
+}
+
+.mix-arrow-left (@w, @color) {
+    .mix-arrow(@w, @color, -135deg);
+}
+
+.mix-arrow-right (@w, @color) {
+    .mix-arrow(@w, @color, 45deg);
+}
+
+.mix-arrow-top (@w, @color) {
+    .mix-arrow(@w, @color, -45deg, ~"0, 50%");
+}
+
+.mix-arrow-bottom (@w, @color: #fff) {
+    .mix-arrow(@w, @color, 135deg, ~"0, 50%");
+}

@@ -1,0 +1,75 @@
+#!/usr/bin/env node
+const program = require("commander");
+const chalk = require("chalk");
+const download = require("download-git-repo");
+const symbols = require("log-symbols");
+const fs = require("fs");
+const inquirer = require("inquirer");
+const ora = require("ora");
+const util = require("../lib/util");
+const { templateUrl } = require("../package");
+const path = require("path");
+/**
+ * Usage.
+ */
+
+program.usage("[act-name]");
+
+program.on("--help", () => {
+    console.log("  Examples:");
+    console.log();
+    console.log(chalk.gray("    # create a new act"));
+    console.log("    $ hvact start act-name");
+    console.log();
+});
+
+/**
+ * Help.
+ */
+
+function help() {
+    program.parse(process.argv);
+    if (program.args.length < 1) return program.help();
+}
+help();
+
+/**
+ * if exist project,confirm continue download.
+ */
+let actName = program.args[0];
+let actPath = path.resolve(__dirname, `./project/${actName}`);
+if (!fs.existsSync(actPath)) {
+    downloadAndGenerate();
+} else {
+    inquirer
+        .prompt([
+            {
+                type: "confirm",
+                message: "act exists. Continue?",
+                name: "ok"
+            }
+        ])
+        .then(answers => {
+            if (answers.ok) {
+                util.rmdir(actPath);
+                downloadAndGenerate();
+            }
+        });
+}
+
+/**
+ * download.
+ */
+function downloadAndGenerate() {
+    const spinner = ora("downloading template");
+    spinner.start();
+    download(templateUrl.act, actPath, err => {
+        if (err) {
+            spinner.fail();
+            console.log(symbols.error, chalk.red(err));
+        } else {
+            spinner.succeed();
+            console.log(symbols.success, chalk.green("活动初始化完成"));
+        }
+    });
+}
