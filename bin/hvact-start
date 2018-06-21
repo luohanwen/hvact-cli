@@ -9,6 +9,7 @@ const ora = require("ora");
 const util = require("../lib/util");
 const { templateUrl } = require("../package");
 const path = require("path");
+const handlebars = require("handlebars");
 /**
  * Usage.
  */
@@ -37,7 +38,8 @@ help();
  * if exist project,confirm continue download.
  */
 let actName = program.args[0];
-let actPath = path.resolve(__dirname, `./project/${actName}`);
+console.log("__dirname", __dirname);
+let actPath = `./project/${actName}`;
 if (!fs.existsSync(actPath)) {
     downloadAndGenerate();
 } else {
@@ -68,8 +70,22 @@ function downloadAndGenerate() {
             spinner.fail();
             console.log(symbols.error, chalk.red(err));
         } else {
+            handlebarConfig();
             spinner.succeed();
             console.log(symbols.success, chalk.green("活动初始化完成"));
         }
     });
+}
+
+/**
+ * handlebar config.js
+ */
+function handlebarConfig() {
+    let configPath = `${actPath}/config.js`;
+    let content = fs.readFileSync(configPath).toString();
+    let data = {
+        actName
+    };
+    const result = handlebars.compile(content)(data);
+    fs.writeFileSync(configPath, result);
 }
