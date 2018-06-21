@@ -38,7 +38,6 @@ help();
  * if exist project,confirm continue download.
  */
 let actName = program.args[0];
-console.log("__dirname", __dirname);
 let actPath = `./project/${actName}`;
 if (!fs.existsSync(actPath)) {
     downloadAndGenerate();
